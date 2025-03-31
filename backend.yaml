@@ -1,6 +1,9 @@
 - name: configure backend server
   become: yes
   hosts: backend
+  vars:
+    mysql_root_password: ExpenseApp@1
+    login_host: mysql.kubevprofile.thevenkat.xyz
   tasks:
   - name: disable default nodejs
     ansible.builtin.command: dnf module disable nodejs -y
@@ -53,11 +56,11 @@
       - cryptography
       executable: pip3.9
   
-  # - name: import mysql data
-  #   community.mysql.mysql_db:
-  #     login_user: root
-  #     login_password: "{{ mysql_password }}"
-  #     login_host: "{{ login_host }}"
-  #     target: /app/schema/backend.sql
-  #     name: all
-  #     state: import
+  - name: import mysql data
+    community.mysql.mysql_db:
+      login_user: root
+      login_password: "{{ mysql_password }}"
+      login_host: "{{ login_host }}"
+      target: /app/schema/backend.sql
+      name: all
+      state: import
